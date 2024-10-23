@@ -9,6 +9,9 @@ import kotlinx.coroutines.flow.asStateFlow
 private val _uiState = MutableStateFlow(GameUiState())
 val uiState: StateFlow<GameUiState> = _uiState.asStateFlow()
 class GameViewModel : ViewModel() {
+    init {
+        resetGame()
+    }
 }
 private var _count = 0
 val count: Int
@@ -19,9 +22,24 @@ private fun pickRandomWordAndShuffle(): String {
     //continue picking up random words until you get one that hasn't been used
     currentWord = allWords.random()
     if (usedWords.contains(currentWord)) {
-        return pickRandomWordsAndShuffle()
+        return pickRandomWordAndShuffle()
     } else {
         usedWords.add(currentWord)
         return shuffleCurrentWord(currentWord)
     }
+}
+private fun shuffleCurrentWord(word: String): String {
+    val tempWord = word.toCharArray()
+    //Scramble the word
+    tempWord.shuffle()
+    while (String(tempWord).equals(word)) {
+        tempWord.shuffle()
+    }
+    return String(tempWord)
+
+}
+
+fun resetGAme() {
+    usedWords.clear()
+    _uiState.value = GameUiState(currentScrambledWord = pickRandomWordAndShuffle())
 }

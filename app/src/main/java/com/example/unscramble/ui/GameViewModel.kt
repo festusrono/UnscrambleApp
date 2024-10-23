@@ -39,7 +39,7 @@ private fun shuffleCurrentWord(word: String): String {
 
 }
 
-fun resetGAme() {
+fun resetGame() {
     usedWords.clear()
     _uiState.value = GameUiState(currentScrambledWord = pickRandomWordAndShuffle())
 }
